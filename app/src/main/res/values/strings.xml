@@ -3,4 +3,68 @@
 
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+    <string name="article_image_description">The image of the article</string>
+    <string name="query_hint">What are you looking for?</string>
+    <string name="search">Search</string>
+    <string name="change_time">Change time</string>
+    <string name="change_date">Change date</string>
+    <string name="from">From</string>
+    <string name="to">To</string>
+    <string name="filter_all_articles">Filter all articles</string>
+    <string name="filter_headlines">Filter top headlines</string>
+    <string name="filter_results">Filter results</string>
+    <string name="empty_field_error">Enter some text here</string>
+
+    <string-array name="article_category">
+        <item>business</item>
+        <item>entertainment</item>
+        <item>general</item>
+        <item>health</item>
+        <item>science</item>
+        <item>sports</item>
+        <item>technology</item>
+    </string-array>
+
+    <string-array name="article_language">
+        <item>ar (Arabic)</item>
+        <item>de (German)</item>
+        <item>en (English, American)</item>
+        <item>es (Spanish)</item>
+        <item>fr (French)</item>
+        <item>he (Hebrew)</item>
+        <item>it (Italian)</item>
+        <item>nl (Dutch)</item>
+        <item>no (Norwegian)</item>
+        <item>pt (Portuguese)</item>
+        <item>ru (Russian)</item>
+        <item>se (Sami)</item>
+        <item>zh (Chinese)</item>
+        <item>all</item>
+    </string-array>
+
+    <string-array name="article_sorting">
+        <item>relevancy</item>
+        <item>popularity</item>
+        <item>publishedAt</item>
+    </string-array>
 </resources>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
