@@ -52,6 +52,8 @@
         <item>popularity</item>
         <item>publishedAt</item>
     </string-array>
+
+    <string name="articles_number">Number of articles: %1$d</string>
 </resources>
 
 

@@ -12,8 +12,8 @@ public interface NewsApi {
 
     @GET("everything?apiKey=6dcde639227b4e1bb7bf93257e6f9695")
     Call<ServerResponse> getAllArticles(@Query("q") String query,
-                                        @Query("from") String fromDate,
-                                        @Query("to") String toDate,
+                                        @Query(value = "from", encoded = true) String fromDate,
+                                        @Query(value = "to", encoded = true) String toDate,
                                         @Query("language") String language,
                                         @Query("sortBy") String sortBy,
                                         @Query("page") int page,

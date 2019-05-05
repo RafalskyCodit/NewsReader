@@ -6,11 +6,25 @@
     android:layout_height="match_parent"
     tools:context=".view.fragment.NewsListFragment">
 
-    <android.support.v7.widget.RecyclerView
-        android:id="@+id/result_list"
+    <LinearLayout
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:orientation="vertical">
+        <TextView
+            android:id="@+id/articles_number"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:padding="16dp"
+            android:textAlignment="center"
+            tools:text="Total number of articles: 4000"/>
+        <android.support.v7.widget.RecyclerView
+            android:id="@+id/result_list"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:text="@string/hello_blank_fragment" />
+    </LinearLayout>
+
+
 
 
     <com.github.clans.fab.FloatingActionMenu

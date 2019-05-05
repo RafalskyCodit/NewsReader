@@ -1,26 +1,29 @@
 package com.example.newsreader.model;
 
-public class UsualQuery {
-    private String query;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
+
+public class UsualQuery extends Query{
     private String fromDate;
     private String toDate;
     private String language;
     private String sortBy;
 
     public UsualQuery(String query, String fromDate, String toDate, String language, String sortBy) {
-        this.query = query;
+        super(query);
         this.fromDate = fromDate;
         this.toDate = toDate;
         this.language = language;
         this.sortBy = sortBy;
     }
 
-    public String getQuery() {
-        return query;
-    }
-
-    public void setQuery(String query) {
-        this.query = query;
+    public UsualQuery() {
+        setQuery("news");
+        fromDate = new SimpleDateFormat("yy-MM-dd", Locale.getDefault()).format(new Date());
+        toDate = new SimpleDateFormat("yy-MM-dd", Locale.getDefault()).format(new Date());
+        language = "en";
+        sortBy = "publishedAt";
     }
 
     public String getFromDate() {

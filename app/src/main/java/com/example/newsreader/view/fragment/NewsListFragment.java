@@ -24,6 +24,7 @@ import com.github.clans.fab.FloatingActionButton;
  * A simple {@link Fragment} subclass.
  */
 public class NewsListFragment extends Fragment {
+    private TextView articlesNumber;
     private RecyclerView resultList;
     private FloatingActionButton filterTopFab;
     private FloatingActionButton filterAllFab;
@@ -37,7 +38,7 @@ public class NewsListFragment extends Fragment {
 
 
     @Override
-    public View onCreateView(LayoutInflater inflater, ViewGroup container,
+    public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
         return inflater.inflate(R.layout.fragment_news_list, container, false);
@@ -56,12 +57,30 @@ public class NewsListFragment extends Fragment {
 
         filterAllFab.setOnClickListener(view -> FragmentUtils.replaceFragment(fm, new GeneralFilterFragment()));
 
-        model.getPagedList().observe(this, pagedList -> adapter.submitList(pagedList));
+        model.getPagedList().observe(this, pagedList -> {
+            adapter.submitList(pagedList);
+        });
+
+        model.getUsualArticleDataSource().observe(this, articleDataSource -> {
+            if (articleDataSource != null) {
+                articleDataSource.getArticleNumber().observe(this, articlesNumberInfo ->
+                        articlesNumber.setText(String.format(getString(R.string.articles_number), articlesNumberInfo)));
+            }
+        });
+
+        model.getTopLineheadersDataSource().observe(this, topLineheadersDataSource -> {
+            if (topLineheadersDataSource != null) {
+                topLineheadersDataSource.getArticleNumber().observe(this, articlesNumberInfo ->
+                        articlesNumber.setText(String.format(getString(R.string.articles_number), articlesNumberInfo)));
+            }
+        });
+
     }
 
     private void init(View view) {
         model = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
 
+        articlesNumber = view.findViewById(R.id.articles_number);
         resultList = view.findViewById(R.id.result_list);
         resultList.setLayoutManager(new LinearLayoutManager(getContext()));
 

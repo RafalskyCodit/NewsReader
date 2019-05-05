@@ -9,10 +9,8 @@ import android.support.v7.util.DiffUtil;
 import android.support.v7.widget.RecyclerView;
 import android.text.TextUtils;
 import android.view.LayoutInflater;
-import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
-import android.widget.ScrollView;
 import android.widget.TextView;
 
 import com.example.newsreader.R;
@@ -23,8 +21,6 @@ import com.example.newsreader.view.activity.WebActivity;
 import com.squareup.picasso.Picasso;
 
 import java.text.ParseException;
-import java.text.SimpleDateFormat;
-import java.util.Locale;
 
 public class NewsListAdapter extends PagedListAdapter<Article, NewsListAdapter.ArticleHolder> {
     private static final DiffUtil.ItemCallback<Article> DIFF_CALLBACK = new DiffUtil.ItemCallback<Article>() {
@@ -96,7 +92,12 @@ public class NewsListAdapter extends PagedListAdapter<Article, NewsListAdapter.A
 
         public void bind(Article article){
             if (article != null){
-                Picasso.get().load(article.getUrlToImage()).error(R.drawable.error).placeholder(R.drawable.ic_cloud_download).into(articleImage);
+                String urlToImage = article.getUrlToImage();
+                if (!TextUtils.isEmpty(urlToImage)){
+                    Picasso.get().load(article.getUrlToImage()).error(R.drawable.error).placeholder(R.drawable.ic_cloud_download).into(articleImage);
+                }else{
+                    Picasso.get().load(R.drawable.no_image);
+                }
                 articleTitle.setText(article.getTitle());
 
                 String description = article.getDescription();
@@ -123,7 +124,7 @@ public class NewsListAdapter extends PagedListAdapter<Article, NewsListAdapter.A
                 }
 
                 try {
-                    articleDate.setText(DateTimeUtils.convertToNewFormat(article.getPublishedAt()));
+                    articleDate.setText(DateTimeUtils.convertToUsualFormat(article.getPublishedAt()));
                 } catch (ParseException e) {
                     e.printStackTrace();
                 }
@@ -143,7 +144,6 @@ public class NewsListAdapter extends PagedListAdapter<Article, NewsListAdapter.A
                 articleAuthor.setText(R.string.loading);
                 articleDate.setText(R.string.loading);
                 articleSource.setText(R.string.loading);
-
             }
         }
     }

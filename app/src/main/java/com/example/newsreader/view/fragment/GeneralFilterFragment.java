@@ -3,6 +3,7 @@ package com.example.newsreader.view.fragment;
 
 import android.app.DatePickerDialog;
 import android.app.TimePickerDialog;
+import android.arch.lifecycle.ViewModelProviders;
 import android.os.Bundle;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
@@ -21,7 +22,13 @@ import android.widget.Spinner;
 import android.widget.TextView;
 
 import com.example.newsreader.R;
+import com.example.newsreader.model.SortOptions;
+import com.example.newsreader.model.UsualQuery;
+import com.example.newsreader.utils.DateTimeUtils;
+import com.example.newsreader.utils.FragmentUtils;
+import com.example.newsreader.viewmodel.MainViewModel;
 
+import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Calendar;
 import java.util.Locale;
@@ -45,10 +52,14 @@ public class GeneralFilterFragment extends Fragment {
     private Button toTimeButton;
 
     private SimpleDateFormat dateFormat = new SimpleDateFormat("yyyy-MM-dd", Locale.getDefault());
-    private SimpleDateFormat timeFormat = new SimpleDateFormat("hh:mm", Locale.getDefault());
+    private SimpleDateFormat timeFormat = new SimpleDateFormat("HH:mm", Locale.getDefault());
 
     private Calendar fromCalendar = Calendar.getInstance();
     private Calendar toCalendar = Calendar.getInstance();
+
+    private String[] languages;
+
+    private MainViewModel model;
 
     public GeneralFilterFragment() {
         // Required empty public constructor
@@ -124,13 +135,41 @@ public class GeneralFilterFragment extends Fragment {
 
             @Override
             public void afterTextChanged(Editable s) {
-                if (TextUtils.isEmpty(s)){
+                searchButton.setEnabled(!TextUtils.isEmpty(s));
+                if (TextUtils.isEmpty(s)) {
                     queryInput.setErrorEnabled(true);
                     queryInput.setError(getResources().getString(R.string.empty_field_error));
-                }else{
+                } else {
                     queryInput.setErrorEnabled(false);
                 }
             }
+        });
+
+        searchButton.setOnClickListener(view -> {
+            String query = queryEdit.getText().toString();
+            String language = languageSpinner.getSelectedItemPosition() != languages.length - 1 ?
+                    languageSpinner.getSelectedItem().toString().substring(0, 2) :
+                    "";
+
+            String sortOption;
+            switch (sortSpinner.getSelectedItemPosition()) {
+                case 0:
+                    sortOption = SortOptions.RELEVANCY_CATEGORY;
+                    break;
+                case 1:
+                    sortOption = SortOptions.POPULARITY_CATEGORY;
+                    break;
+                default:
+                    sortOption = SortOptions.PUBLISHED_AT_CATEGORY;
+                    break;
+            }
+
+
+            String fromDate = DateTimeUtils.converToUTCFormat(fromDateInfo.getText().toString() + " " + fromTimeInfo.getText().toString());
+            String toDate = DateTimeUtils.converToUTCFormat(toDateInfo.getText().toString() + " " + toTimeInfo.getText().toString());
+
+            model.updateUsualQuery(new UsualQuery(query, fromDate, toDate, language, sortOption));
+            FragmentUtils.replaceFragment(getFragmentManager(), new NewsListFragment());
         });
     }
 
@@ -142,6 +181,8 @@ public class GeneralFilterFragment extends Fragment {
     }
 
     private void init(View view) {
+        model = ViewModelProviders.of(getActivity()).get(MainViewModel.class);
+
         queryEdit = view.findViewById(R.id.query_edit);
         queryInput = view.findViewById(R.id.query_input);
         queryInput.setError(getResources().getString(R.string.empty_field_error));
@@ -154,12 +195,14 @@ public class GeneralFilterFragment extends Fragment {
         toTimeInfo = view.findViewById(R.id.to_time_info);
 
         searchButton = view.findViewById(R.id.search_button);
+        searchButton.setEnabled(false);
+
         fromTimeButton = view.findViewById(R.id.from_time_button);
         fromDateButton = view.findViewById(R.id.from_date_button);
         toDateButton = view.findViewById(R.id.to_date_button);
         toTimeButton = view.findViewById(R.id.to_time_button);
 
-        String[] languages = getResources().getStringArray(R.array.article_language);
+        languages = getResources().getStringArray(R.array.article_language);
         ArrayAdapter<String> languageAdapter = new ArrayAdapter<>(getContext(), android.R.layout.simple_list_item_1,
                 languages);
         languageSpinner.setAdapter(languageAdapter);
